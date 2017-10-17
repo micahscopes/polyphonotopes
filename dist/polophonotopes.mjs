@@ -138,6 +138,7 @@ var FloydWarshall = function () {
 }();
 
 var Bitset = require('fast-bitset');
+var minrepr = require('min-repr');
 
 function accidentals(size) {
     var acc = new Bitset(size);
@@ -152,12 +153,109 @@ function accidentals(size) {
 
     return accidentals;
 }
-
-function walk(set) {
-    for (var i = 0; i <= set.MAX_BIT; i++) {
-        a = 2;
+function intervals(bs) {
+    var r = [];
+    var indices = bs.getIndices();
+    var size = indices.length;
+    for (var i = 0; i < size; i++) {
+        r.push(indices[(i + 1) % size] + (i + 1 >= size ? bs.MAX_BIT + 1 : 0) - indices[i]);
     }
+    return r;
 }
 
-export { accidentals, walk };
+function shape(bs) {
+    var intershape = intervals(bs);
+    var shift = minrepr(intershape);
+    var size = intershape.length;
+    var shape = [];
+    for (var i = shift; i < size + shift; i++) {
+        shape.push(intershape[i % size]);
+    }
+    return String(shape);
+}
+
+function forage(shapes, visit) {
+    if (shapes.constructor === Bitset) {
+        shapes = [shapes];
+    }
+    if (visit && visit.constructor === Bitset) {
+        visit = [visit];
+    }
+    var size = shapes[0].MAX_BIT + 1;
+    visit = visit ? visit : shapes;
+    shapes = shapes.map(function (s) {
+        return shape(s);
+    });
+
+    var visited = [];
+    var keepers = [];
+
+    var Acc = accidentals(size);
+
+    var _loop = function _loop() {
+        debugger;
+        var start = visit.pop();
+        visited.push(start.dehydrate());
+        var goto = Acc.map(function (a) {
+            return start.xor(a);
+        });
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = goto[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var g = _step.value;
+
+                if (!visited.includes(g.dehydrate())) {
+                    visit.push(g);
+                }
+                if (shapes.includes(shape(g))) {
+                    keepers.push([start, g]);
+                }
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+    };
+
+    while (visit.length > 0) {
+        _loop();
+    }
+    return keepers;
+}
+
+// was gonna make an algorithm that accumulates a
+// running smallest shape but then i found the 
+// min-repr library and decided not to.
+//export function shape(set){
+//    let size = set.MAX_BIT+1
+//    let indices = set.getIndices()
+//    let sh = []
+//    let shift = 0;
+//    while( sh.length < set.getIndices().length ) {
+//        for(let k=0; k<sh.length; k++){
+//            let next = indices[(shift+k)%size]
+//            if(next > sh[k]) {
+//                shift += k
+//                sh = []
+//            } else {
+//                sh.push(next)
+//            }
+//        }
+//    }
+//}
+
+export { accidentals, intervals, shape, forage };
 //# sourceMappingURL=polophonotopes.mjs.map
