@@ -48,16 +48,19 @@ export function forage(shapes,visit){
 
     let Acc = accidentals(size)
     while(visit.length > 0) {
-        debugger;
         let start = visit.pop()
+        if (visited.includes(start.dehydrate())) { continue }
+        console.log('starting on',start.getIndices())
+        console.log(keepers.length,'keepers so far')
         visited.push(start.dehydrate())
         let goto = Acc.map((a)=>start.xor(a))
         for(let g of goto){
-            if(!visited.includes(g.dehydrate())){
-                visit.push(g)
-            }
             if(shapes.includes(shape(g))){
                 keepers.push([start,g])
+                console.log(start.getIndices(),g.getIndices())
+                if(!visited.includes(g.dehydrate())){
+                    visit.push(g)
+                }
             }
         }
     }

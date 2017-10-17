@@ -143,6 +143,9 @@ var FloydWarshall = function () {
   return FloydWarshall;
 }();
 
+
+//# sourceMappingURL=graph-hops.mjs.map
+
 var Bitset = require('fast-bitset');
 var minrepr = require('min-repr');
 
@@ -199,8 +202,12 @@ function forage(shapes, visit) {
     var Acc = accidentals(size);
 
     var _loop = function _loop() {
-        debugger;
         var start = visit.pop();
+        if (visited.includes(start.dehydrate())) {
+            return 'continue';
+        }
+        console.log('starting on', start.getIndices());
+        console.log(keepers.length, 'keepers so far');
         visited.push(start.dehydrate());
         var goto = Acc.map(function (a) {
             return start.xor(a);
@@ -213,11 +220,12 @@ function forage(shapes, visit) {
             for (var _iterator = goto[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var g = _step.value;
 
-                if (!visited.includes(g.dehydrate())) {
-                    visit.push(g);
-                }
                 if (shapes.includes(shape(g))) {
                     keepers.push([start, g]);
+                    console.log(start.getIndices(), g.getIndices());
+                    if (!visited.includes(g.dehydrate())) {
+                        visit.push(g);
+                    }
                 }
             }
         } catch (err) {
@@ -237,7 +245,9 @@ function forage(shapes, visit) {
     };
 
     while (visit.length > 0) {
-        _loop();
+        var _ret = _loop();
+
+        if (_ret === 'continue') continue;
     }
     return keepers;
 }
