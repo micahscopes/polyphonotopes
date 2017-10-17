@@ -72,25 +72,3 @@ export function explore(visit,lookingFor){
     return keepers
 }
 
-
-// was gonna make an algorithm that accumulates a
-// running smallest shape but then i found the 
-// min-repr library and decided not to.
-//export function shape(set){
-//    let size = set.MAX_BIT+1
-//    let indices = set.getIndices()
-//    let sh = []
-//    let shift = 0;
-//    while( sh.length < set.getIndices().length ) {
-//        for(let k=0; k<sh.length; k++){
-//            let next = indices[(shift+k)%size]
-//            if(next > sh[k]) {
-//                shift += k
-//                sh = []
-//            } else {
-//                sh.push(next)
-//            }
-//        }
-//    }
-//}
-

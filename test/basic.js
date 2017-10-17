@@ -44,8 +44,26 @@ t.test('find shapes', function(t) {
 })
 
 t.test('explore', function(t){
-    let explore = P.explore
-    t.equal(explore(majorDiatonic).length,24576)
+    t.test('little space, all connections', function(t){
+        let start = new Bitset(3)
+        let explore = P.explore
+        debugger
+        t.equal(explore(start).length,12)
+        t.end()
+    })
+
+    t.test("find scales that are maximally even", function(t){
+
+        let f = function(s){
+            let i = P.intervals(s)
+            let size = i.length
+            i = new Set(i)
+            let myhill = i.has(1) && i.has(2) && i.size == 2
+            return myhill
+        }
+        t.equal(P.explore(majorDiatonic,f).length,24*5)
+        t.end()
+    })
 
     t.end()
 })
