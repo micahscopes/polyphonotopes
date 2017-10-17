@@ -183,18 +183,30 @@ function shape(bs) {
     return String(shape);
 }
 
-function forage(shapes, visit) {
+function findShapes(shapes, visit) {
     if (shapes.constructor === Bitset) {
         shapes = [shapes];
     }
     if (visit && visit.constructor === Bitset) {
         visit = [visit];
     }
-    var size = shapes[0].MAX_BIT + 1;
     visit = visit ? visit : shapes;
     shapes = shapes.map(function (s) {
         return shape(s);
     });
+    var lookingFor = function lookingFor(g) {
+        return shapes.includes(shape(g));
+    };
+    return explore(visit, lookingFor);
+}
+function explore(visit, lookingFor) {
+    lookingFor = lookingFor ? lookingFor : function (g) {
+        return true;
+    };
+    if (visit && visit.constructor === Bitset) {
+        visit = [visit];
+    }
+    var size = visit[0].MAX_BIT + 1;
 
     var visited = [];
     var keepers = [];
@@ -206,8 +218,6 @@ function forage(shapes, visit) {
         if (visited.includes(start.dehydrate())) {
             return 'continue';
         }
-        console.log('starting on', start.getIndices());
-        console.log(keepers.length, 'keepers so far');
         visited.push(start.dehydrate());
         var goto = Acc.map(function (a) {
             return start.xor(a);
@@ -220,9 +230,8 @@ function forage(shapes, visit) {
             for (var _iterator = goto[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var g = _step.value;
 
-                if (shapes.includes(shape(g))) {
+                if (lookingFor(g)) {
                     keepers.push([start, g]);
-                    console.log(start.getIndices(), g.getIndices());
                     if (!visited.includes(g.dehydrate())) {
                         visit.push(g);
                     }
@@ -276,7 +285,8 @@ function forage(shapes, visit) {
 exports.accidentals = accidentals;
 exports.intervals = intervals;
 exports.shape = shape;
-exports.forage = forage;
+exports.findShapes = findShapes;
+exports.explore = explore;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

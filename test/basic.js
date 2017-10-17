@@ -27,22 +27,25 @@ t.test('shape', function(t) {
     t.end()
 })
 
-t.test('forage', function(t) {
-    let forage = P.forage
+t.test('find shapes', function(t) {
+    let findShapes = P.findShapes
     t.test('major', function(t){
-        debugger
-        t.equal(forage(majorDiatonic).length,24)
+        t.equal(findShapes(majorDiatonic).length,24)
         t.end()
     })
 
     t.test('major and altered', function(t){
-        debugger
         let acc = P.accidentals(12)
         let alteredDiatonic = acc[0].xor(majorDiatonic)
-        t.equal(forage([majorDiatonic,alteredDiatonic]).length,72)
+        t.equal(findShapes([majorDiatonic,alteredDiatonic]).length,72)
         t.end()
     })
     t.end()
 })
 
+t.test('explore', function(t){
+    let explore = P.explore
+    t.equal(explore(majorDiatonic).length,24576)
 
+    t.end()
+})

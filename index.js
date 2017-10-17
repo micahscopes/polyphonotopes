@@ -36,12 +36,20 @@ export function shape(bs){
     return String(shape)
 }
 
-export function forage(shapes,visit){
+
+export function findShapes(shapes,visit){
     if(shapes.constructor === Bitset){shapes = [shapes]}
     if(visit && visit.constructor === Bitset){visit = [visit]}
     let size = shapes[0].MAX_BIT+1
     visit = visit ? visit : shapes
     shapes = shapes.map((s) => shape(s))
+    let lookingFor = (g) => shapes.includes(shape(g))
+    return explore(visit,lookingFor)
+}
+export function explore(visit,lookingFor){
+    lookingFor = lookingFor ? lookingFor : (g)=>true
+    if(visit && visit.constructor === Bitset){visit = [visit]}
+    let size = visit[0].MAX_BIT+1
 
     let visited = []
     let keepers = []
@@ -50,14 +58,11 @@ export function forage(shapes,visit){
     while(visit.length > 0) {
         let start = visit.pop()
         if (visited.includes(start.dehydrate())) { continue }
-        console.log('starting on',start.getIndices())
-        console.log(keepers.length,'keepers so far')
         visited.push(start.dehydrate())
         let goto = Acc.map((a)=>start.xor(a))
         for(let g of goto){
-            if(shapes.includes(shape(g))){
+            if(lookingFor(g)){
                 keepers.push([start,g])
-                console.log(start.getIndices(),g.getIndices())
                 if(!visited.includes(g.dehydrate())){
                     visit.push(g)
                 }
