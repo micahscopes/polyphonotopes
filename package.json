@@ -24,6 +24,8 @@
   "dependencies": {
     "fast-bitset": "https://github.com/mattkrick/fast-bitset",
     "graph-hops": "https://github.com/micahscopes/graph-hops-js",
-    "min-repr": "https://github.com/micahscopes/min-repr.git"
+    "immutable": "^3.8.2",
+    "min-repr": "https://github.com/micahscopes/min-repr.git",
+    "tonal": "0.69.9"
   }
 }

@@ -137,9 +137,6 @@ var FloydWarshall = function () {
   return FloydWarshall;
 }();
 
-
-//# sourceMappingURL=graph-hops.mjs.map
-
 var Bitset = require('fast-bitset');
 var minrepr = require('min-repr');
 
@@ -156,6 +153,15 @@ function accidentals(size) {
 
     return accidentals;
 }
+
+function fromIndices(size, indices) {
+    var bs = new Bitset(size);
+    indices.forEach(function (x) {
+        bs.set(x);
+    });
+    return bs;
+}
+
 function intervals(bs) {
     var r = [];
     var indices = bs.getIndices();
@@ -166,7 +172,15 @@ function intervals(bs) {
     return r;
 }
 
+function info(bs) {
+    var sh = shape(bs, True);
+    sh['chroma'] = bs.getIndices();
+    return sh;
+}
+
 function shape(bs) {
+    var info = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
     var intershape = intervals(bs);
     var shift = minrepr(intershape);
     var size = intershape.length;
@@ -174,7 +188,12 @@ function shape(bs) {
     for (var i = shift; i < size + shift; i++) {
         shape.push(intershape[i % size]);
     }
-    return String(shape);
+    shape = String(shape);
+    if (info) {
+        return { intervals: intershape, shape: shape, offset: shift };
+    } else {
+        return shape;
+    }
 }
 
 function findShapes(shapes, visit) {
@@ -258,5 +277,5 @@ function explore(visit, lookingFor) {
     return { nodes: nodes, edges: edges };
 }
 
-export { accidentals, intervals, shape, findShapes, explore };
+export { accidentals, fromIndices, intervals, info, shape, findShapes, explore };
 //# sourceMappingURL=polophonotopes.mjs.map

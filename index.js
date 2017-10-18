@@ -15,6 +15,13 @@ export function accidentals(size) {
 
     return accidentals;
 }
+
+export function fromIndices(size,indices) {
+    let bs = new Bitset(size)
+    indices.forEach((x)=>{bs.set(x)})
+    return bs
+}
+
 export function intervals(bs){
     let r = []
     let indices = bs.getIndices()
@@ -25,7 +32,13 @@ export function intervals(bs){
     return r;
 }
 
-export function shape(bs){
+export function info(bs){
+    let sh = shape(bs,True)
+    sh['chroma'] = bs.getIndices()
+    return sh
+}
+
+export function shape(bs,info=false){
     let intershape = intervals(bs)
     let shift = minrepr(intershape)
     let size = intershape.length
@@ -33,7 +46,12 @@ export function shape(bs){
     for(let i=shift; i<size+shift; i++){
         shape.push(intershape[i%size])
     }
-    return String(shape)
+    shape = String(shape)
+    if(info){
+        return {intervals: intershape, shape: shape, offset: shift}
+    } else {
+        return shape
+    }
 }
 
 
@@ -47,7 +65,10 @@ export function findShapes(shapes,visit){
     return explore(visit,lookingFor)
 }
 
-export function explore(visit,lookingFor){
+export function explore(visit,lookingFor,makeEdge,makeNode){
+    makeEdge = makeEdge ? makeEdge : (frm,to) => {source: frm, target: to}
+    makeNode = makeNode ? makeNode : (n) => n
+
     lookingFor = lookingFor ? lookingFor : (g)=>true
     if(visit && visit.constructor === Bitset){visit = [visit]}
     let size = visit[0].MAX_BIT+1
@@ -61,11 +82,11 @@ export function explore(visit,lookingFor){
         let start = visit.pop()
         if (visited.includes(start.dehydrate())) { continue }
         visited.push(start.dehydrate())
-        nodes.push(start)
+        nodes.push(makeNode(start))
         let goto = Acc.map((a)=>start.xor(a))
         for(let g of goto){
             if(lookingFor(g)){
-                edges.push({source: start, target: g})
+                edges.push(makeEdge(g))
                 if(!visited.includes(g.dehydrate())){
                     visit.push(g)
                 }
