@@ -10,7 +10,13 @@ export default {
     {
       file: pkg.main,
       format: 'umd',
-      moduleName: 'graphHops',
+      moduleName: pkg.name,
+      sourceMap: true
+    },
+    {
+      file: pkg.browser,
+      name: pkg.name,
+      format: 'iife',
       sourceMap: true
     },
     {

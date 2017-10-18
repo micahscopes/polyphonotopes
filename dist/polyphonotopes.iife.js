@@ -1,3 +1,6 @@
+var polyphonotopes = (function (exports) {
+'use strict';
+
 var classCallCheck = function classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -292,5 +295,15 @@ function explore(visit, lookingFor, makeEdge, makeNode) {
     return { nodes: nodes, edges: edges };
 }
 
-export { accidentals, fromIndices, intervals, info, shape, findShapes, explore };
-//# sourceMappingURL=polophonotopes.mjs.map
+exports.accidentals = accidentals;
+exports.fromIndices = fromIndices;
+exports.intervals = intervals;
+exports.info = info;
+exports.shape = shape;
+exports.findShapes = findShapes;
+exports.explore = explore;
+
+return exports;
+
+}({}));
+//# sourceMappingURL=polyphonotopes.iife.js.map

@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.graphHops = {})));
+	(factory((global.polyphonotopes = {})));
 }(this, (function (exports) { 'use strict';
 
 var classCallCheck = function classCallCheck(instance, Constructor) {
@@ -309,4 +309,4 @@ exports.explore = explore;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=polyphonotopes.js.map
+//# sourceMappingURL=polyphonotopes.umd.js.map
