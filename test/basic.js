@@ -30,14 +30,14 @@ t.test('shape', function(t) {
 t.test('find shapes', function(t) {
     let findShapes = P.findShapes
     t.test('major', function(t){
-        t.equal(findShapes(majorDiatonic).length,24)
+        t.equal(findShapes(majorDiatonic).edges.length,24)
         t.end()
     })
 
     t.test('major and altered', function(t){
         let acc = P.accidentals(12)
         let alteredDiatonic = acc[0].xor(majorDiatonic)
-        t.equal(findShapes([majorDiatonic,alteredDiatonic]).length,72)
+        t.equal(findShapes([majorDiatonic,alteredDiatonic]).edges.length,72)
         t.end()
     })
     t.end()
@@ -48,7 +48,7 @@ t.test('explore', function(t){
         let start = new Bitset(3)
         let explore = P.explore
         debugger
-        t.equal(explore(start).length,12)
+        t.equal(explore(start).edges.length,12)
         t.end()
     })
 
@@ -61,7 +61,7 @@ t.test('explore', function(t){
             let myhill = i.has(1) && i.has(2) && i.size == 2
             return myhill
         }
-        t.equal(P.explore(majorDiatonic,f).length,24*5)
+        t.equal(P.explore(majorDiatonic,f).edges.length,24*5)
         t.end()
     })
 

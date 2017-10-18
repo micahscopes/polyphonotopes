@@ -46,29 +46,32 @@ export function findShapes(shapes,visit){
     let lookingFor = (g) => shapes.includes(shape(g))
     return explore(visit,lookingFor)
 }
+
 export function explore(visit,lookingFor){
     lookingFor = lookingFor ? lookingFor : (g)=>true
     if(visit && visit.constructor === Bitset){visit = [visit]}
     let size = visit[0].MAX_BIT+1
 
     let visited = []
-    let keepers = []
+    let edges = []
+    let nodes = []
 
     let Acc = accidentals(size)
     while(visit.length > 0) {
         let start = visit.pop()
         if (visited.includes(start.dehydrate())) { continue }
         visited.push(start.dehydrate())
+        nodes.push(start)
         let goto = Acc.map((a)=>start.xor(a))
         for(let g of goto){
             if(lookingFor(g)){
-                keepers.push([start,g])
+                edges.push({source: start, target: g})
                 if(!visited.includes(g.dehydrate())){
                     visit.push(g)
                 }
             }
         }
     }
-    return keepers
+    return {nodes: nodes, edges: edges}
 }
 

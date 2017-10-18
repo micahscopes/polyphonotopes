@@ -193,6 +193,7 @@ function findShapes(shapes, visit) {
     };
     return explore(visit, lookingFor);
 }
+
 function explore(visit, lookingFor) {
     lookingFor = lookingFor ? lookingFor : function (g) {
         return true;
@@ -203,7 +204,8 @@ function explore(visit, lookingFor) {
     var size = visit[0].MAX_BIT + 1;
 
     var visited = [];
-    var keepers = [];
+    var edges = [];
+    var nodes = [];
 
     var Acc = accidentals(size);
 
@@ -213,6 +215,7 @@ function explore(visit, lookingFor) {
             return 'continue';
         }
         visited.push(start.dehydrate());
+        nodes.push(start);
         var goto = Acc.map(function (a) {
             return start.xor(a);
         });
@@ -225,7 +228,7 @@ function explore(visit, lookingFor) {
                 var g = _step.value;
 
                 if (lookingFor(g)) {
-                    keepers.push([start, g]);
+                    edges.push({ source: start, target: g });
                     if (!visited.includes(g.dehydrate())) {
                         visit.push(g);
                     }
@@ -252,7 +255,7 @@ function explore(visit, lookingFor) {
 
         if (_ret === 'continue') continue;
     }
-    return keepers;
+    return { nodes: nodes, edges: edges };
 }
 
 export { accidentals, intervals, shape, findShapes, explore };
