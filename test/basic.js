@@ -58,8 +58,8 @@ t.test('explore', function(t){
             let i = P.intervals(s)
             let size = i.length
             i = new Set(i)
-            let myhill = i.has(1) && i.has(2) && i.size == 2
-            return myhill
+            let maxeven = i.has(1) && i.has(2) && i.size == 2
+            return maxeven
         }
         t.equal(P.explore(majorDiatonic,f).edges.length,24*5)
         t.end()
