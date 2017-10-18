@@ -905,14 +905,14 @@ function findShapes(shapes, visit) {
     };
     var makeNode = info;
     var makeEdge = function makeEdge(f, t) {
-        return { source: f.id, target: t.id };
+        return { from: f.id, to: t.id };
     };
     return explore(visit, lookingFor, makeEdge, makeNode);
 }
 
 function explore(visit, lookingFor, makeEdge, makeNode) {
     makeEdge = makeEdge ? makeEdge : function (frm, to) {
-        return { source: frm, target: to };
+        return { from: frm, to: to };
     };
     makeNode = makeNode ? makeNode : function (n) {
         return n;

@@ -65,12 +65,12 @@ export function findShapes(shapes,visit){
     shapes = shapes.map((s) => shape(s))
     let lookingFor = (g) => shapes.includes(g['shape'])
     let makeNode = info
-    let makeEdge = (f,t) => {return {source: f.id, target: t.id}} 
+    let makeEdge = (f,t) => {return {from: f.id, to: t.id}} 
     return explore(visit,lookingFor,makeEdge,makeNode)
 }
 
 export function explore(visit,lookingFor,makeEdge,makeNode){
-    makeEdge = makeEdge ? makeEdge : (frm,to) => ({source: frm, target: to})
+    makeEdge = makeEdge ? makeEdge : (frm,to) => ({from: frm, to: to})
     makeNode = makeNode ? makeNode : (n) => n
 
     lookingFor = lookingFor ? lookingFor : (g)=>true
