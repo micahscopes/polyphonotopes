@@ -1,0 +1,68 @@
+<script src='./bower_components/polyphonotopes/dist/polyphonotopes.iife.js'></script>
+<script src='./bower_components/vis/dist/vis-network.min.js'></script>
+<body>
+<div id='graph'></div>
+<script type='text/javascript'>
+    let f = function(s){
+        let i = s.intervals
+        let size = i.length
+        i = new Set(i)
+        //console.log(s.chroma,i)
+        let maxeven = i.size == 2
+        return maxeven
+    }
+
+    let makeNode = Poly.info
+    let makeEdge = (f,t) => {return {from: f.id, to: t.id}} 
+
+    var start = Poly.fromIndices(12,[0,3,5,7,9])
+    var data = Poly.explore(start,f,makeEdge,makeNode)
+
+    window.data = data
+    data.nodes.forEach(function(n){
+        n['group'] = n.shape
+        n['label'] = n.id
+    })
+
+    data.edges.forEach(function(e){
+        e['arrows'] = 'middle'
+    })
+    // create a network
+    var container = document.getElementById('graph');
+    var options = {
+      nodes: {
+        shape: 'dot',
+        scaling: {
+          min: 10,
+          max: 30
+        },
+        font: {
+          size: 12,
+          face: 'Tahoma'
+        }
+      },
+      edges: {
+        width: 0.15,
+        color: {inherit: 'from'},
+        smooth: {
+          type: 'continuous'
+        }
+      },
+      physics: {
+        stabilization: false,
+        barnesHut: {
+          gravitationalConstant: -80000,
+          springConstant: 0.1,
+          springLength: 50
+        }
+      },
+      interaction: {
+        tooltipDelay: 200,
+        hideEdgesOnDrag: false
+      }
+    };
+    var network = new vis.Network(container, data, options);
+
+
+</script>
+</body>

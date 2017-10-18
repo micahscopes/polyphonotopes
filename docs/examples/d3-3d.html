@@ -1,0 +1,47 @@
+<script src="//unpkg.com/3d-force-graph"></script>
+<script src='./bower_components/polyphonotopes/dist/polyphonotopes.iife.js'></script>
+<script src='./bower_components/graph-hops-js/dist/graph-hops.js'></script>
+
+<body>
+<div id='graph'></div>
+<script type='text/javascript'>
+    let f = function(s){
+        let i = s.intervals
+        let size = i.length
+        i = new Set(i)
+        //console.log(s.chroma,i)
+        let maxeven = i.size == 2
+        return maxeven
+    }
+
+    let makeNode = Poly.info
+    let makeEdge = (f,t) => {return {source: f.id, target: t.id}}
+
+    //var start = Poly.fromIndices(12,[0,2,4,5,7,9,11])
+    //var data = Poly.explore(start,f,makeEdge,makeNode)
+
+    var diatonic = Poly.fromIndices(12,[0,2,4,5,7,9,11])
+    var altered = Poly.fromIndices(12,[1,2,4,5,7,9,11])
+    var harmonicminor = Poly.fromIndices(12,[0,2,3,5,7,8,11])
+    
+    var data = Poly.findShapes([altered,diatonic])
+    data.nodes.forEach(function(n){
+        n['group'] = n.shape
+        n['label'] = n.id
+    })
+    data.edges.forEach(function(e){
+        e['source'] = e.from
+        e['target'] = e.to
+    })
+    
+    console.log(data) 
+    var links = graphHops.graphHops(data.nodes,data.edges,(n)=>n.id)
+    
+    window.myGraph = ForceGraph3D();
+    myGraph(document.getElementById('graph'))
+    .graphData({nodes: data.nodes, links: links[2]})
+    .autoColorBy('shape');
+
+
+</script>
+</body>

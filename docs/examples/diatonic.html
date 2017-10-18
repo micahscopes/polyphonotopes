@@ -1,0 +1,19 @@
+<script src='./bower_components/polyphonotopes/dist/polyphonotopes.iife.js'></script>
+<script src='./bower_components/vis/dist/vis-network.min.js'></script>
+<body>
+<div id='graph'></div>
+<script type='text/javascript'>
+    var diatonic = Poly.fromIndices(12,[0,2,4,5,7,9,11])
+    var altered = Poly.fromIndices(12,[1,2,4,5,7,9,11])
+    var data = Poly.findShapes([altered,diatonic])    
+    data.nodes.forEach(function(n){
+        n['group'] = n.shape
+        n['label'] = n.id
+    })
+    // create a network
+    var container = document.getElementById('graph');
+    var options = {};
+    var network = new vis.Network(container, data, options);
+
+</script>
+</body>
