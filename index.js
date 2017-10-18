@@ -1,6 +1,6 @@
 import ghops from 'graph-hops'
-const Bitset = require('fast-bitset')
-const minrepr = require('min-repr')
+import Bitset from 'fast-bitset'
+import minrepr from 'min-repr'
 
 export function accidentals(size) {
     let acc = new Bitset(size)
@@ -58,8 +58,8 @@ export function shape(bs,info=false){
 
 
 export function findShapes(shapes,visit){
-    if(shapes.constructor === Bitset){shapes = [shapes]}
-    if(visit && visit.constructor === Bitset){visit = [visit]}
+    if(shapes.getIndices){shapes = [shapes]}
+    if(visit && visit.getIndices){visit = [visit]}
     let size = shapes[0].MAX_BIT+1
     visit = visit ? visit : shapes
     shapes = shapes.map((s) => shape(s))
@@ -74,7 +74,7 @@ export function explore(visit,lookingFor,makeEdge,makeNode){
     makeNode = makeNode ? makeNode : (n) => n
 
     lookingFor = lookingFor ? lookingFor : (g)=>true
-    if(visit && visit.constructor === Bitset){visit = [visit]}
+    if(visit && visit.getIndices){visit = [visit]}
     let size = visit[0].MAX_BIT+1
 
     let visited = []

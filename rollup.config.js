@@ -15,7 +15,7 @@ export default {
     },
     {
       file: pkg.browser,
-      name: pkg.name,
+      name: 'Poly',
       format: 'iife',
       sourceMap: true
     },

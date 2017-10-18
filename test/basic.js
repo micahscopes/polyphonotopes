@@ -1,4 +1,4 @@
-var P = require('../dist/polyphonotopes.js')
+var P = require('../dist/polyphonotopes.umd.js')
 const Bitset = require('fast-bitset')
 const minrepr = require('min-repr')
 
