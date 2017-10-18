@@ -33,8 +33,10 @@ export function intervals(bs){
 }
 
 export function info(bs){
-    let sh = shape(bs,True)
+    let sh = shape(bs,true)
     sh['chroma'] = bs.getIndices()
+    sh['id'] = String(sh['chroma'])
+    sh['bitset'] = bs
     return sh
 }
 
@@ -61,12 +63,14 @@ export function findShapes(shapes,visit){
     let size = shapes[0].MAX_BIT+1
     visit = visit ? visit : shapes
     shapes = shapes.map((s) => shape(s))
-    let lookingFor = (g) => shapes.includes(shape(g))
-    return explore(visit,lookingFor)
+    let lookingFor = (g) => shapes.includes(g['shape'])
+    let makeNode = info
+    let makeEdge = (f,t) => {return {source: f.id, target: t.id}} 
+    return explore(visit,lookingFor,makeEdge,makeNode)
 }
 
 export function explore(visit,lookingFor,makeEdge,makeNode){
-    makeEdge = makeEdge ? makeEdge : (frm,to) => {source: frm, target: to}
+    makeEdge = makeEdge ? makeEdge : (frm,to) => ({source: frm, target: to})
     makeNode = makeNode ? makeNode : (n) => n
 
     lookingFor = lookingFor ? lookingFor : (g)=>true
@@ -80,13 +84,15 @@ export function explore(visit,lookingFor,makeEdge,makeNode){
     let Acc = accidentals(size)
     while(visit.length > 0) {
         let start = visit.pop()
+        let startNode = makeNode(start)
         if (visited.includes(start.dehydrate())) { continue }
         visited.push(start.dehydrate())
-        nodes.push(makeNode(start))
+        nodes.push(startNode)
         let goto = Acc.map((a)=>start.xor(a))
         for(let g of goto){
-            if(lookingFor(g)){
-                edges.push(makeEdge(g))
+            let gNode = makeNode(g)
+            if(lookingFor(gNode)){
+                edges.push(makeEdge(startNode,gNode))
                 if(!visited.includes(g.dehydrate())){
                     visit.push(g)
                 }

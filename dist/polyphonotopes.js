@@ -179,8 +179,10 @@ function intervals(bs) {
 }
 
 function info(bs) {
-    var sh = shape(bs, True);
+    var sh = shape(bs, true);
     sh['chroma'] = bs.getIndices();
+    sh['id'] = String(sh['chroma']);
+    sh['bitset'] = bs;
     return sh;
 }
 
@@ -214,12 +216,23 @@ function findShapes(shapes, visit) {
         return shape(s);
     });
     var lookingFor = function lookingFor(g) {
-        return shapes.includes(shape(g));
+        return shapes.includes(g['shape']);
     };
-    return explore(visit, lookingFor);
+    var makeNode = info;
+    var makeEdge = function makeEdge(f, t) {
+        return { source: f.id, target: t.id };
+    };
+    return explore(visit, lookingFor, makeEdge, makeNode);
 }
 
-function explore(visit, lookingFor) {
+function explore(visit, lookingFor, makeEdge, makeNode) {
+    makeEdge = makeEdge ? makeEdge : function (frm, to) {
+        return { source: frm, target: to };
+    };
+    makeNode = makeNode ? makeNode : function (n) {
+        return n;
+    };
+
     lookingFor = lookingFor ? lookingFor : function (g) {
         return true;
     };
@@ -236,11 +249,12 @@ function explore(visit, lookingFor) {
 
     var _loop = function _loop() {
         var start = visit.pop();
+        var startNode = makeNode(start);
         if (visited.includes(start.dehydrate())) {
             return 'continue';
         }
         visited.push(start.dehydrate());
-        nodes.push(start);
+        nodes.push(startNode);
         var goto = Acc.map(function (a) {
             return start.xor(a);
         });
@@ -252,8 +266,9 @@ function explore(visit, lookingFor) {
             for (var _iterator = goto[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var g = _step.value;
 
-                if (lookingFor(g)) {
-                    edges.push({ source: start, target: g });
+                var gNode = makeNode(g);
+                if (lookingFor(gNode)) {
+                    edges.push(makeEdge(startNode, gNode));
                     if (!visited.includes(g.dehydrate())) {
                         visit.push(g);
                     }

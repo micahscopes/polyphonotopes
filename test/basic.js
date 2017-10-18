@@ -31,6 +31,7 @@ t.test('find shapes', function(t) {
     let findShapes = P.findShapes
     t.test('major', function(t){
         t.equal(findShapes(majorDiatonic).edges.length,24)
+        debugger
         t.end()
     })
 
