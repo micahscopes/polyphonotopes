@@ -3,4 +3,9 @@ node_modules
 *.bk
 *.lock
 package-lock.json
-bower_components
+
+**/bower_components/**/*
+!**/bower_components/
+!**/bower_components/*
+!**/bower_components/**/dist/
+!**/bower_components/**/dist/*.js
