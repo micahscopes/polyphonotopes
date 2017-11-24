@@ -863,6 +863,9 @@ function intervals(bs) {
 function info(bs) {
     var sh = shape(bs, true);
     sh['chroma'] = bs.getIndices();
+    var complement = bs.clone();
+    complement.toggleRange(0, complement.MAX_BIT);
+    sh['complement'] = complement.getIndices();
     sh['id'] = String(sh['chroma']);
     sh['bitset'] = bs;
     return sh;

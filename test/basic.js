@@ -27,6 +27,13 @@ t.test('shape', function(t) {
     t.end()
 })
 
+t.test('complement', function(t) {
+    var info = P.info
+    t.equal(String(info(majorDiatonic)['complement']),String([1,3,6,8,10]))
+
+    t.end()
+})
+
 t.test('find shapes', function(t) {
     let findShapes = P.findShapes
     t.test('major', function(t){
