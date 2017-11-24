@@ -1,6 +1,6 @@
 {
   "name": "polyphonotopes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "explorations of (micro)tonal spaces!",
   "main": "dist/polyphonotopes.umd.js",
   "module": "dist/polyphonotopes.mjs",
