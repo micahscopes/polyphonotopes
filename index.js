@@ -35,6 +35,9 @@ export function intervals(bs){
 export function info(bs){
     let sh = shape(bs,true)
     sh['chroma'] = bs.getIndices()
+    let complement = bs.clone()
+    complement.toggleRange(0,complement.MAX_BIT);
+    sh['complement'] = complement.getIndices()
     sh['id'] = String(sh['chroma'])
     sh['bitset'] = bs
     return sh

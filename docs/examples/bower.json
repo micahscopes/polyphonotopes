@@ -18,6 +18,8 @@
   "dependencies": {
     "graph-hops-js": "https://github.com/micahscopes/graph-hops-js.git",
     "polyphonotopes": "../../",
-    "vis": "^4.21.0"
+    "vis": "^4.21.0",
+    "all-around-keyboard": "https://github.com/micahscopes/all-around-keyboard.git",
+    "d3": "^4"
   }
 }
