@@ -889,7 +889,7 @@ function shape(bs) {
     }
 }
 
-function findShapes(shapes, visit) {
+function findShapes(shapes, visit, makeEdge, makeNode) {
     if (shapes.getIndices) {
         shapes = [shapes];
     }
@@ -903,10 +903,7 @@ function findShapes(shapes, visit) {
     var lookingFor = function lookingFor(g) {
         return shapes.includes(g['shape']);
     };
-    var makeNode = info;
-    var makeEdge = function makeEdge(f, t) {
-        return { from: f.id, to: t.id };
-    };
+    makeNode = makeNode ? makeNode : info;
     return explore(visit, lookingFor, makeEdge, makeNode);
 }
 

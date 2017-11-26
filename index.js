@@ -60,15 +60,14 @@ export function shape(bs,info=false){
 }
 
 
-export function findShapes(shapes,visit){
+export function findShapes(shapes,visit,makeEdge,makeNode){
     if(shapes.getIndices){shapes = [shapes]}
     if(visit && visit.getIndices){visit = [visit]}
     let size = shapes[0].MAX_BIT+1
     visit = visit ? visit : shapes
     shapes = shapes.map((s) => shape(s))
     let lookingFor = (g) => shapes.includes(g['shape'])
-    let makeNode = info
-    let makeEdge = (f,t) => {return {from: f.id, to: t.id}} 
+    makeNode = makeNode ? makeNode : info
     return explore(visit,lookingFor,makeEdge,makeNode)
 }
 
