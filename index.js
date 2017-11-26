@@ -72,7 +72,7 @@ export function findShapes(shapes,visit,makeEdge,makeNode){
 }
 
 export function explore(visit,lookingFor,makeEdge,makeNode){
-    makeEdge = makeEdge ? makeEdge : (frm,to) => ({from: frm, to: to})
+    makeEdge = makeEdge ? makeEdge : (frm,to) => ({from: frm, to: to, source:frm, target: to})
     makeNode = makeNode ? makeNode : (n) => n
 
     lookingFor = lookingFor ? lookingFor : (g)=>true

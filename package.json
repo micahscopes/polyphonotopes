@@ -4,7 +4,6 @@
   "description": "explorations of (micro)tonal spaces!",
   "main": "dist/polyphonotopes.umd.js",
   "module": "dist/polyphonotopes.mjs",
-  "browser": "dist/polyphonotopes.iife.js",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w ./index.js",
